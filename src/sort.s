@@ -1,125 +1,169 @@
-	.file	"sort.c"
 	.text
-	.p2align 4,,15
-	.globl	_quick_sort
-	.def	_quick_sort;	.scl	2;	.type	32;	.endef
+	.globl _quick_sort
 _quick_sort:
 LFB0:
-	.cfi_startproc
-	pushl	%ebp
-	.cfi_def_cfa_offset 8
-	.cfi_offset 5, -8
-	pushl	%edi
-	.cfi_def_cfa_offset 12
-	.cfi_offset 7, -12
-	pushl	%esi
-	.cfi_def_cfa_offset 16
-	.cfi_offset 6, -16
-	pushl	%ebx
-	.cfi_def_cfa_offset 20
-	.cfi_offset 3, -20
-	subl	$44, %esp
-	.cfi_def_cfa_offset 64
-	movl	64(%esp), %ebp
-	jmp	L12
-	.p2align 4,,10
+	pushq	%rbp
+LCFI0:
+	movq	%rsp, %rbp
+LCFI1:
+	subq	$32, %rsp
+	movq	%rdi, -24(%rbp)
+	movl	%esi, -28(%rbp)
+	movl	$0, -4(%rbp)
+	movl	-28(%rbp), %eax
+	subl	$1, %eax
+	movl	%eax, -8(%rbp)
+	movl	-28(%rbp), %eax
+	movl	%eax, %edx
+	shrl	$31, %edx
+	addl	%edx, %eax
+	sarl	%eax
+	cltq
+	leaq	0(,%rax,8), %rdx
+	movq	-24(%rbp), %rax
+	addq	%rdx, %rax
+	movq	(%rax), %rax
+	movl	%eax, -12(%rbp)
+	jmp	L2
+L3:
+	addl	$1, -4(%rbp)
+L2:
+	movl	-4(%rbp), %eax
+	cltq
+	leaq	0(,%rax,8), %rdx
+	movq	-24(%rbp), %rax
+	addq	%rdx, %rax
+	movq	(%rax), %rdx
+	movl	-12(%rbp), %eax
+	cltq
+	cmpq	%rax, %rdx
+	jl	L3
+	jmp	L4
 L5:
-	cmpl	24(%esp), %edx
-	jge	L19
-	.p2align 4,,10
-L9:
-	testl	%edx, %edx
-	jle	L10
-	addl	$1, %edx
-	movl	%ebp, (%esp)
-	movl	%edx, 4(%esp)
+	subl	$1, -8(%rbp)
+L4:
+	movl	-8(%rbp), %eax
+	cltq
+	leaq	0(,%rax,8), %rdx
+	movq	-24(%rbp), %rax
+	addq	%rdx, %rax
+	movq	(%rax), %rdx
+	movl	-12(%rbp), %eax
+	cltq
+	cmpq	%rax, %rdx
+	jg	L5
+	movl	-4(%rbp), %eax
+	cmpl	-8(%rbp), %eax
+	jg	L6
+	movl	-4(%rbp), %eax
+	cltq
+	leaq	0(,%rax,8), %rdx
+	movq	-24(%rbp), %rax
+	addq	%rdx, %rax
+	movq	(%rax), %rax
+	movl	%eax, -16(%rbp)
+	movl	-8(%rbp), %eax
+	cltq
+	leaq	0(,%rax,8), %rdx
+	movq	-24(%rbp), %rax
+	addq	%rax, %rdx
+	movl	-4(%rbp), %eax
+	cltq
+	leaq	0(,%rax,8), %rcx
+	movq	-24(%rbp), %rax
+	addq	%rcx, %rax
+	movq	(%rdx), %rdx
+	movq	%rdx, (%rax)
+	movl	-8(%rbp), %eax
+	cltq
+	leaq	0(,%rax,8), %rdx
+	movq	-24(%rbp), %rax
+	addq	%rax, %rdx
+	movl	-16(%rbp), %eax
+	cltq
+	movq	%rax, (%rdx)
+	addl	$1, -4(%rbp)
+	subl	$1, -8(%rbp)
+L6:
+	movl	-4(%rbp), %eax
+	cmpl	-8(%rbp), %eax
+	jle	L2
+	cmpl	$0, -8(%rbp)
+	jle	L8
+	movl	-8(%rbp), %eax
+	leal	1(%rax), %edx
+	movq	-24(%rbp), %rax
+	movl	%edx, %esi
+	movq	%rax, %rdi
+	call	_quick_sort
+L8:
+	movl	-4(%rbp), %eax
+	cmpl	-28(%rbp), %eax
+	jge	L10
+	movl	-28(%rbp), %eax
+	subl	-4(%rbp), %eax
+	movl	-4(%rbp), %edx
+	movslq	%edx, %rdx
+	leaq	0(,%rdx,8), %rcx
+	movq	-24(%rbp), %rdx
+	addq	%rcx, %rdx
+	movl	%eax, %esi
+	movq	%rdx, %rdi
 	call	_quick_sort
 L10:
-	movl	24(%esp), %eax
-	cmpl	%eax, 68(%esp)
-	jle	L1
-	subl	%eax, 68(%esp)
-	leal	0(%ebp,%eax,8), %ebp
-L12:
-	movl	68(%esp), %eax
-	movl	$1, %edi
-	leal	-1(%eax), %edx
-	shrl	$31, %eax
-	addl	68(%esp), %eax
-	sarl	%eax
-	movl	0(%ebp,%eax,8), %eax
-	movl	%eax, 16(%esp)
-	sarl	$31, %eax
-	movl	%eax, 20(%esp)
-	.p2align 4,,10
-L2:
-	leal	-1(%edi), %eax
-	movl	20(%esp), %esi
-	cmpl	%esi, -4(%ebp,%edi,8)
-	movl	16(%esp), %ebx
-	movl	%eax, 24(%esp)
-	movl	-8(%ebp,%edi,8), %eax
-	movl	%eax, 28(%esp)
-	jl	L3
-	jg	L13
-	cmpl	%ebx, %eax
-	jb	L3
-L13:
-	leal	0(,%edx,8), %eax
-	leal	0(%ebp,%eax), %esi
-	movl	4(%esi), %ecx
-	cmpl	20(%esp), %ecx
-	movl	(%esi), %ebx
-	jl	L5
-	jg	L14
-	cmpl	16(%esp), %ebx
-	jbe	L5
-L14:
-	leal	-8(%ebp,%eax), %eax
-	.p2align 4,,10
-L15:
-	movl	%eax, %esi
-	subl	$8, %eax
-	subl	$1, %edx
-	movl	12(%eax), %ecx
-	cmpl	20(%esp), %ecx
-	movl	8(%eax), %ebx
-	jg	L15
-	jl	L5
-	cmpl	16(%esp), %ebx
-	ja	L15
-	cmpl	24(%esp), %edx
-	jl	L9
-L19:
-	movl	28(%esp), %eax
-	subl	$1, %edx
-	movl	%ebx, -8(%ebp,%edi,8)
-	movl	%ecx, -4(%ebp,%edi,8)
-	movl	%edi, 24(%esp)
-	movl	%eax, (%esi)
-	sarl	$31, %eax
-	cmpl	%edx, %edi
-	movl	%eax, 4(%esi)
-	jg	L9
-L3:
-	addl	$1, %edi
-	jmp	L2
-L1:
-	addl	$44, %esp
-	.cfi_def_cfa_offset 20
-	popl	%ebx
-	.cfi_restore 3
-	.cfi_def_cfa_offset 16
-	popl	%esi
-	.cfi_restore 6
-	.cfi_def_cfa_offset 12
-	popl	%edi
-	.cfi_restore 7
-	.cfi_def_cfa_offset 8
-	popl	%ebp
-	.cfi_restore 5
-	.cfi_def_cfa_offset 4
+	nop
+	leave
+LCFI2:
 	ret
-	.cfi_endproc
 LFE0:
-	.ident	"GCC: (MinGW.org GCC-6.3.0-1) 6.3.0"
+	.section __TEXT,__eh_frame,coalesced,no_toc+strip_static_syms+live_support
+EH_frame1:
+	.set L$set$0,LECIE1-LSCIE1
+	.long L$set$0
+LSCIE1:
+	.long	0
+	.byte	0x1
+	.ascii "zR\0"
+	.byte	0x1
+	.byte	0x78
+	.byte	0x10
+	.byte	0x1
+	.byte	0x10
+	.byte	0xc
+	.byte	0x7
+	.byte	0x8
+	.byte	0x90
+	.byte	0x1
+	.align 3
+LECIE1:
+LSFDE1:
+	.set L$set$1,LEFDE1-LASFDE1
+	.long L$set$1
+LASFDE1:
+	.long	LASFDE1-EH_frame1
+	.quad	LFB0-.
+	.set L$set$2,LFE0-LFB0
+	.quad L$set$2
+	.byte	0
+	.byte	0x4
+	.set L$set$3,LCFI0-LFB0
+	.long L$set$3
+	.byte	0xe
+	.byte	0x10
+	.byte	0x86
+	.byte	0x2
+	.byte	0x4
+	.set L$set$4,LCFI1-LCFI0
+	.long L$set$4
+	.byte	0xd
+	.byte	0x6
+	.byte	0x4
+	.set L$set$5,LCFI2-LCFI1
+	.long L$set$5
+	.byte	0xc
+	.byte	0x7
+	.byte	0x8
+	.align 3
+LEFDE1:
+	.ident	"GCC: (Homebrew GCC 10.2.0) 10.2.0"
+	.subsections_via_symbols
