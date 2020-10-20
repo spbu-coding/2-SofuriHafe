@@ -1,169 +1,116 @@
+	.file	"sort.c"
 	.text
-	.globl _quick_sort
-_quick_sort:
-LFB0:
+	.p2align 4
+	.globl	quick_sort
+	.type	quick_sort, @function
+quick_sort:
+.LFB0:
+	.cfi_startproc
+	endbr64
+	pushq	%r12
+	.cfi_def_cfa_offset 16
+	.cfi_offset 12, -16
+	movl	%esi, %r12d
 	pushq	%rbp
-LCFI0:
-	movq	%rsp, %rbp
-LCFI1:
-	subq	$32, %rsp
-	movq	%rdi, -24(%rbp)
-	movl	%esi, -28(%rbp)
-	movl	$0, -4(%rbp)
-	movl	-28(%rbp), %eax
-	subl	$1, %eax
-	movl	%eax, -8(%rbp)
-	movl	-28(%rbp), %eax
-	movl	%eax, %edx
-	shrl	$31, %edx
-	addl	%edx, %eax
+	.cfi_def_cfa_offset 24
+	.cfi_offset 6, -24
+	pushq	%rbx
+	.cfi_def_cfa_offset 32
+	.cfi_offset 3, -32
+	movq	%rdi, %rbx
+.L10:
+	movl	%r12d, %eax
+	leal	-1(%r12), %edx
+	xorl	%esi, %esi
+	shrl	$31, %eax
+	addl	%r12d, %eax
 	sarl	%eax
 	cltq
-	leaq	0(,%rax,8), %rdx
-	movq	-24(%rbp), %rax
-	addq	%rdx, %rax
-	movq	(%rax), %rax
-	movl	%eax, -12(%rbp)
-	jmp	L2
-L3:
-	addl	$1, -4(%rbp)
-L2:
-	movl	-4(%rbp), %eax
-	cltq
-	leaq	0(,%rax,8), %rdx
-	movq	-24(%rbp), %rax
-	addq	%rdx, %rax
-	movq	(%rax), %rdx
-	movl	-12(%rbp), %eax
-	cltq
-	cmpq	%rax, %rdx
-	jl	L3
-	jmp	L4
-L5:
-	subl	$1, -8(%rbp)
-L4:
-	movl	-8(%rbp), %eax
-	cltq
-	leaq	0(,%rax,8), %rdx
-	movq	-24(%rbp), %rax
-	addq	%rdx, %rax
-	movq	(%rax), %rdx
-	movl	-12(%rbp), %eax
-	cltq
-	cmpq	%rax, %rdx
-	jg	L5
-	movl	-4(%rbp), %eax
-	cmpl	-8(%rbp), %eax
-	jg	L6
-	movl	-4(%rbp), %eax
-	cltq
-	leaq	0(,%rax,8), %rdx
-	movq	-24(%rbp), %rax
-	addq	%rdx, %rax
-	movq	(%rax), %rax
-	movl	%eax, -16(%rbp)
-	movl	-8(%rbp), %eax
-	cltq
-	leaq	0(,%rax,8), %rdx
-	movq	-24(%rbp), %rax
-	addq	%rax, %rdx
-	movl	-4(%rbp), %eax
-	cltq
-	leaq	0(,%rax,8), %rcx
-	movq	-24(%rbp), %rax
-	addq	%rcx, %rax
-	movq	(%rdx), %rdx
-	movq	%rdx, (%rax)
-	movl	-8(%rbp), %eax
-	cltq
-	leaq	0(,%rax,8), %rdx
-	movq	-24(%rbp), %rax
-	addq	%rax, %rdx
-	movl	-16(%rbp), %eax
-	cltq
-	movq	%rax, (%rdx)
-	addl	$1, -4(%rbp)
-	subl	$1, -8(%rbp)
-L6:
-	movl	-4(%rbp), %eax
-	cmpl	-8(%rbp), %eax
-	jle	L2
-	cmpl	$0, -8(%rbp)
-	jle	L8
-	movl	-8(%rbp), %eax
-	leal	1(%rax), %edx
-	movq	-24(%rbp), %rax
-	movl	%edx, %esi
-	movq	%rax, %rdi
-	call	_quick_sort
-L8:
-	movl	-4(%rbp), %eax
-	cmpl	-28(%rbp), %eax
-	jge	L10
-	movl	-28(%rbp), %eax
-	subl	-4(%rbp), %eax
-	movl	-4(%rbp), %edx
-	movslq	%edx, %rdx
-	leaq	0(,%rdx,8), %rcx
-	movq	-24(%rbp), %rdx
-	addq	%rcx, %rdx
-	movl	%eax, %esi
-	movq	%rdx, %rdi
-	call	_quick_sort
-L10:
-	nop
-	leave
-LCFI2:
+	movslq	(%rbx,%rax,8), %rdi
+	movslq	%edx, %rax
+	movq	(%rbx,%rax,8), %rcx
+	.p2align 4,,10
+	.p2align 3
+.L2:
+	movq	(%rbx,%rsi,8), %r9
+	movl	%esi, %r10d
+	movl	%esi, %ebp
+	cmpq	%rdi, %r9
+	jl	.L3
+	cmpq	%rcx, %rdi
+	jge	.L4
+	leaq	-8(%rbx,%rax,8), %rax
+	.p2align 4,,10
+	.p2align 3
+.L5:
+	movq	%rax, %r8
+	movq	(%rax), %rcx
+	subq	$8, %rax
+	subl	$1, %edx
+	cmpq	%rdi, %rcx
+	jg	.L5
+.L6:
+	cmpl	%esi, %edx
+	jge	.L14
+.L7:
+	testl	%edx, %edx
+	jle	.L8
+	leal	1(%rdx), %esi
+	movq	%rbx, %rdi
+	call	quick_sort
+.L8:
+	cmpl	%ebp, %r12d
+	jle	.L1
+	subl	%ebp, %r12d
+	movslq	%ebp, %rbp
+	leaq	(%rbx,%rbp,8), %rbx
+	jmp	.L10
+	.p2align 4,,10
+	.p2align 3
+.L14:
+	movslq	%r9d, %r9
+	leal	1(%r10), %ebp
+	subl	$1, %edx
+	movq	%rcx, (%rbx,%rsi,8)
+	movq	%r9, (%r8)
+	cmpl	%ebp, %edx
+	jl	.L7
+	movslq	%edx, %rax
+	movq	(%rbx,%rax,8), %rcx
+.L3:
+	addq	$1, %rsi
+	jmp	.L2
+	.p2align 4,,10
+	.p2align 3
+.L4:
+	leaq	(%rbx,%rax,8), %r8
+	jmp	.L6
+.L1:
+	popq	%rbx
+	.cfi_def_cfa_offset 24
+	popq	%rbp
+	.cfi_def_cfa_offset 16
+	popq	%r12
+	.cfi_def_cfa_offset 8
 	ret
-LFE0:
-	.section __TEXT,__eh_frame,coalesced,no_toc+strip_static_syms+live_support
-EH_frame1:
-	.set L$set$0,LECIE1-LSCIE1
-	.long L$set$0
-LSCIE1:
-	.long	0
-	.byte	0x1
-	.ascii "zR\0"
-	.byte	0x1
-	.byte	0x78
-	.byte	0x10
-	.byte	0x1
-	.byte	0x10
-	.byte	0xc
-	.byte	0x7
-	.byte	0x8
-	.byte	0x90
-	.byte	0x1
-	.align 3
-LECIE1:
-LSFDE1:
-	.set L$set$1,LEFDE1-LASFDE1
-	.long L$set$1
-LASFDE1:
-	.long	LASFDE1-EH_frame1
-	.quad	LFB0-.
-	.set L$set$2,LFE0-LFB0
-	.quad L$set$2
-	.byte	0
-	.byte	0x4
-	.set L$set$3,LCFI0-LFB0
-	.long L$set$3
-	.byte	0xe
-	.byte	0x10
-	.byte	0x86
-	.byte	0x2
-	.byte	0x4
-	.set L$set$4,LCFI1-LCFI0
-	.long L$set$4
-	.byte	0xd
-	.byte	0x6
-	.byte	0x4
-	.set L$set$5,LCFI2-LCFI1
-	.long L$set$5
-	.byte	0xc
-	.byte	0x7
-	.byte	0x8
-	.align 3
-LEFDE1:
-	.ident	"GCC: (Homebrew GCC 10.2.0) 10.2.0"
-	.subsections_via_symbols
+	.cfi_endproc
+.LFE0:
+	.size	quick_sort, .-quick_sort
+	.ident	"GCC: (Ubuntu 9.3.0-17ubuntu1~20.04) 9.3.0"
+	.section	.note.GNU-stack,"",@progbits
+	.section	.note.gnu.property,"a"
+	.align 8
+	.long	 1f - 0f
+	.long	 4f - 1f
+	.long	 5
+0:
+	.string	 "GNU"
+1:
+	.align 8
+	.long	 0xc0000002
+	.long	 3f - 2f
+2:
+	.long	 0x3
+3:
+	.align 8
+4:
